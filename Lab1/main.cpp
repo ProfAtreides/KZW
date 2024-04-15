@@ -289,13 +289,14 @@ int main() {
     vector<rpq> data3;
     vector<rpq> data4;
 
-    while (data.good()) {
+    while (!data.eof()) {
         string isData;
         data >> isData;
-        if (isData.contains("data")) {
+        if (isData.size() > 0 && isData[0] == 'd')
+        {
             int n;
             data >> n;
-            switch (isData.at(isData.size() - 1)) {
+            switch (isData[isData.size() - 1]) {
                 case '0':
                     data0 = loadData(data, n);
                     break;
