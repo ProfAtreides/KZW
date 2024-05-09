@@ -69,21 +69,24 @@ vector<int> sortByWeight(int n, int m, int **matrix) {
 
 int main() {
     ifstream data;
-    ofstream log;
+    //ofstream log;
 
     data.open("../Lab3/data.txt", ifstream::in);
-    log.open("../Lab3/log.txt", ofstream::out);
+    //log.open("../Lab3/log.txt", ofstream::out);
 
+    //int correct=0,wrong=0,weird=0;
 
-
-    int correct=0,wrong=0,weird=0;
-
+    auto start = chrono::high_resolution_clock::now();
     while (!data.eof()) {
-        auto start = chrono::high_resolution_clock::now();
         string tempString;
         data >> tempString;
 
-        cout << tempString.substr(4) << "\n";
+        while(tempString.find("data") != string::npos)
+        {
+            data >> tempString;
+        }
+
+        cout << tempString << "\n";
 
         int n, m;
         data >> n >> m;
@@ -128,52 +131,13 @@ int main() {
 
         vector<int> corOrder;
 
-        for (int i = 0; i < n; i++) {
-            int helper;
-            data >> helper;
-            corOrder.push_back(helper - 1);
-        }
-        //cout << "\n" << CMax(n,m,matrix,order) << "\n";
-
-        log << iter << "\n";
-        for(int i  = 0;i<n;i++)
-        {
-            log << order[i] << " ";
-        }
-
-
-
-        if (corCMAX == thisCMAX) {
-            bool orderIsCorrect = true;
-            for(int i = 0;i<n;i++)
-            {
-                if(corOrder[i] != order[i])
-                {
-                    cout << "ERROR\n\n";
-                    orderIsCorrect = false;
-                    break;
-                }
-            }
-            if(orderIsCorrect)
-            {
-                correct++;
-                cout << "OK\n";
-            }
-        } else if (corCMAX > thisCMAX) {
-            weird++;
-            cout << corCMAX << " | " << thisCMAX << "\n";
-        } else {
-            wrong++;
-            cout << "ERROR\n";
-        }
         iter++;
         if (iter == 121) {
             break;
         }
-
-        auto elapsed = chrono::high_resolution_clock::now() - start;
-        cout << chrono::duration_cast<chrono::milliseconds>(elapsed) << "\n\n";
-
         //delete matrix;
     }
+
+    auto elapsed = chrono::high_resolution_clock::now() - start;
+    cout << chrono::duration_cast<chrono::milliseconds>(elapsed) << "\n\n";
 }
