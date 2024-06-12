@@ -27,15 +27,33 @@ int CMax(int n, int m, int **matrix, vector<int> order) {
     return CMax;
 }
 
+void addNewTabu(vector<int> newPath,vector<vector<int>>tabuList,int tabuMaxSize){
+    if(tabuList.size()>=tabuMaxSize){
+        tabuList.erase(tabuList.begin());
+    }
+    tabuList.push_back(newPath);
+}
+
+bool checkForTabu(vector<int> path,vector<vector<int>>tabuList) {
+    for (auto tabu : tabuList) {
+        if (tabu == path) {
+            return true;
+        }
+    }
+    return false;
+}
+
 int main() {
     ifstream data;
     ofstream log, logT;
 
-    data.open("../Lab4/data.txt", ifstream::in);
-    log.open("../Lab4/log.txt", ofstream::out);
-    logT.open("../Lab4/logT.txt", ofstream::out);
+    data.open("../Lab5/data.txt", ifstream::in);
+    log.open("../Lab5/log.txt", ofstream::out);
+    logT.open("../Lab5/logT.txt", ofstream::out);
 
     vector<int> order;
+
+    const int tabuMaxSize = 5;
 
     int n, m;
     data >> n >> m;
@@ -49,7 +67,6 @@ int main() {
             data >> matrix[i][j];
         }
     }
-
 
     int lastCMax = 501258;
 
