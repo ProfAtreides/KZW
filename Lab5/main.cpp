@@ -27,20 +27,35 @@ int CMax(int n, int m, int **matrix, vector<int> order) {
     return CMax;
 }
 
-void addNewTabu(vector<int> newPath,vector<vector<int>>tabuList,int tabuMaxSize){
+void addNewTabu(const vector<int>& newPath,vector<vector<int>>tabuList,int tabuMaxSize){
     if(tabuList.size()>=tabuMaxSize){
         tabuList.erase(tabuList.begin());
     }
     tabuList.push_back(newPath);
 }
 
-bool checkForTabu(vector<int> path,vector<vector<int>>tabuList) {
-    for (auto tabu : tabuList) {
+bool checkForTabu(const vector<int>& path,const vector<vector<int>>&tabuList) {
+    for (const auto& tabu : tabuList) {
         if (tabu == path) {
             return true;
         }
     }
     return false;
+}
+
+void randTillDifferent(vector<int> &order, const vector <vector<int>>& tabuList) {
+
+    int n = order.size();
+
+    while(true) {
+        auto tempOrder = order;
+        int firstIndex = rand() % n, secondIndex = rand() % n;
+        swap(tempOrder[firstIndex], tempOrder[secondIndex]);
+        if (!checkForTabu(tempOrder,tabuList)){
+            addNewTabu(tempOrder,tabuList,5);
+            break;
+        }
+    }
 }
 
 int main() {
@@ -81,6 +96,8 @@ int main() {
 
     double t = 100;
 
+    vector<vector<int>> tabuList;
+
     const int iter_number = 20000;
     const int reduce_t_every = 10;
     const double cooling_rate = 0.05;
@@ -88,9 +105,7 @@ int main() {
     for (int i = 0; i < iter_number; i++) {
         auto tempOrder = order;
 
-        int firstIndex = rand() % n, secondIndex = rand() % n;
-
-        swap(tempOrder[firstIndex], tempOrder[secondIndex]);
+        randTillDifferent(tempOrder,tabuList);
 
         int currCMAX = CMax(n, m, matrix, tempOrder);
 
